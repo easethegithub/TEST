@@ -15,6 +15,24 @@ pipeline {
             }
         }
 
+        stage('Build Java Program') {
+            steps {
+                script {
+                    // Compile the Java program using javac
+                    sh 'javac HelloWorld.java'
+                }
+            }
+        }
+
+        stage('Test Java Program') {
+            steps {
+                script {
+                    // Run the Java program (for testing or just printing the message)
+                    sh 'java HelloWorld'
+                }
+            }
+        }
+
         stage('Docker Build and Push') {
             steps {
                 script {
@@ -42,10 +60,10 @@ pipeline {
 
     post {
         success {
-            echo 'Docker image built and pushed successfully!'
+            echo 'Java build, test, Docker image build, and push were successful!'
         }
         failure {
-            echo 'Docker image build or push failed.'
+            echo 'Something went wrong during the build or Docker process.'
         }
     }
 }
