@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define Docker credentials as environment variables
-        DOCKER_USERNAME = 'vaibhavdock77' // Replace with your Docker Hub username
+        DOCKER_USERNAME = 'sutarvaibhavv77@gmail.com' // Replace with your Docker Hub username
         DOCKER_PASSWORD = 'Vaibhav@123' // Replace with your Docker Hub password
     }
 
