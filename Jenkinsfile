@@ -18,8 +18,8 @@ pipeline {
         stage('Build Java Program') {
             steps {
                 script {
-                    // Compile the Java program using javac
-                    sh 'javac HelloWorld.java'
+                    // Compile the Java program using javac (Windows uses bat)
+                    bat 'javac HelloWorld.java'
                 }
             }
         }
@@ -27,8 +27,8 @@ pipeline {
         stage('Test Java Program') {
             steps {
                 script {
-                    // Run the Java program (for testing or just printing the message)
-                    sh 'java HelloWorld'
+                    // Run the Java program (Windows uses bat)
+                    bat 'java HelloWorld'
                 }
             }
         }
@@ -36,23 +36,19 @@ pipeline {
         stage('Docker Build and Push') {
             steps {
                 script {
-                    // Ensure Docker is installed
-                    sh 'docker --version'
+                    // Ensure Docker is installed (Windows uses bat)
+                    bat 'docker --version'
 
-                    // Login to Docker Hub using environment variables
-                    sh """
+                    // Login to Docker Hub using environment variables (Windows uses bat)
+                    bat """
                         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
                     """
                     
-                    // Build Docker image
-                    sh '''
-                        docker build -t my-docker-image .
-                    '''
+                    // Build Docker image (Windows uses bat)
+                    bat 'docker build -t my-docker-image .'
                     
-                    // Push Docker image to Docker Hub
-                    sh '''
-                        docker push my-docker-image
-                    '''
+                    // Push Docker image to Docker Hub (Windows uses bat)
+                    bat 'docker push my-docker-image'
                 }
             }
         }
