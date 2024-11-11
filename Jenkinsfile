@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Docker username and password will be injected using withCredentials
-        DOCKER_USERNAME = 'sutarvaibhavv77@gmail.com'  // Leave blank, will be set by Jenkins credentials
+        DOCKER_USERNAME = 'vaibhavdock77'  // Leave blank, will be set by Jenkins credentials
         DOCKER_PASSWORD = 'Vaibhav@123'  // Leave blank, will be set by Jenkins credentials
     }
 
