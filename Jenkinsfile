@@ -13,7 +13,7 @@ pipeline {
                 git url: 'https://github.com/easethegithub/TEST.git', branch: 'main'
             }
         }
-        
+
         stage('Build') {
             steps {
                 script {
@@ -22,7 +22,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Test') {
             steps {
                 script {
@@ -47,15 +47,20 @@ pipeline {
             steps {
                 script {
                     // Use Jenkins credentials for Docker Hub login
-                    withCredentials([usernamePassword(credentialsId: '2908b623-6530-48b5-b890-222c2a591b15', usernameVariable: 'vaibhavdock77', passwordVariable: 'Vaibhav@123')]) {
-                        // Login to Docker Hub
-                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                    withCredentials([usernamePassword(credentialsId: '2908b623-6530-48b5-b890-222c2a591b15', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        try {
+                            // Login to Docker Hub
+                            sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                            
+                            // Build Docker image
+                            sh 'docker build -t my-docker-image .'
 
-                        // Build Docker image
-                        sh 'docker build -t my-docker-image .'
-
-                        // Push Docker image to Docker Hub
-                        sh 'docker push my-docker-image'
+                            // Push Docker image to Docker Hub
+                            sh 'docker push my-docker-image'
+                        } catch (Exception e) {
+                            currentBuild.result = 'FAILURE'
+                            throw e
+                        }
                     }
                 }
             }
