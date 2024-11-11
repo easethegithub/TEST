@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Define Docker credentials as environment variables
-        DOCKER_USERNAME = 'sutarvaibhavv77@gmail.com' // Replace with your Docker Hub username
-        DOCKER_PASSWORD = 'Vaibhav@123' // Replace with your Docker Hub password
+        // Docker username and password will be injected using withCredentials
+        DOCKER_USERNAME = 'sutarvaibhavv77@gmail.com'  // Leave blank, will be set by Jenkins credentials
+        DOCKER_PASSWORD = 'Vaibhav@123'  // Leave blank, will be set by Jenkins credentials
     }
 
     stages {
@@ -39,14 +39,17 @@ pipeline {
                     // Ensure Docker is installed (Windows uses bat)
                     bat 'docker --version'
 
-                    // Login to Docker Hub using environment variables (Windows uses bat)
-                    bat """
-                        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-                    """
-                    
+                    // Use Jenkins credentials to securely login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // Login to Docker Hub using environment variables
+                        bat """
+                            echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+                        """
+                    }
+
                     // Build Docker image (Windows uses bat)
                     bat 'docker build -t my-docker-image .'
-                    
+
                     // Push Docker image to Docker Hub (Windows uses bat)
                     bat 'docker push my-docker-image'
                 }
